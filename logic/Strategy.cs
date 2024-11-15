@@ -79,12 +79,16 @@ namespace PlayerDotNet.logic
                 var target = Enemy.Where(b => UnitsAtTarget(Cache.Home, b, AvailbaleUnits) > 0)
                     .OrderBy(b => UnitsAtTarget(Cache.Home, b, AvailbaleUnits)).First();
                 
-                // TODO: Add Chance to not Attack
+                var DamagePercent = UnitsAtTarget(Cache.Home, target, AvailbaleUnits) / target.Population * 100;
+                if (DamagePercent > Random.Shared.Next(0,100))
+                {
+                    action.Dest = target.Uid;
+                    action.Src = Cache.Home.Uid;
+                    action.Amount = AvailbaleUnits;
+                    return action; 
+                }
                 
-                action.Dest = target.Uid;
-                action.Src = Cache.Home.Uid;
-                action.Amount = AvailbaleUnits;
-                return action;
+               
             }
             
             
